@@ -25,9 +25,9 @@
             android:layout_weight="1"
             android:gravity="start"
             android:hint="Ingrese el numero de horas"
-            android:textColorHint="#605C5C"
             android:inputType="number"
-            android:textColor="#F8F8F8" />
+            android:textColor="#F8F8F8"
+            android:textColorHint="#605C5C" />
 
         <Button
             android:id="@+id/simular"
@@ -43,23 +43,26 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topLayout">
+        app:layout_constraintTop_toBottomOf="@+id/topLayout"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:orientation="vertical"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="49dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TABLA DE NUMEROS ALEATORIOS"
+                android:text="NUMEROS ALEATORIOS"
                 android:textColor="#F8F8F8"
+                android:textSize="25dp"
                 android:textStyle="bold|italic" />
 
             <TableLayout
@@ -84,15 +87,16 @@
                 android:text="X = Sum(Ramdon) / iteraciones"
                 android:textAlignment="center"
                 android:textColor="#F8F8F8"
-                android:textSize="25dp"
+                android:textSize="20dp"
                 android:textStyle="italic"
                 android:visibility="invisible" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TABLA DE VARIABLES ALEATORIOS"
+                android:text="VARIABLES ALEATORIAS"
                 android:textColor="#F8F8F8"
+                android:textSize="25dp"
                 android:textStyle="bold|italic" />
 
             <TableLayout
@@ -101,6 +105,39 @@
                 android:layout_height="wrap_content"
                 android:stretchColumns="*"
                 android:textColor="#F8F8F8" />
+
+            <lecho.lib.hellocharts.view.LineChartView
+                android:id="@+id/lineChart"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/VarLabel1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:text="Box Muller 1"
+                    android:textColor="#0000FF"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/VarLabel2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:text="Box Muller 2"
+                    android:textColor="#00FF00"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
