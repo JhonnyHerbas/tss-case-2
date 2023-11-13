@@ -35,21 +35,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var execute: Button = findViewById(R.id.simular)
-        var input: EditText = findViewById(R.id.input)
+        val execute: Button = findViewById(R.id.simular)
+        val input: EditText = findViewById(R.id.input)
         tableRandoms = findViewById(R.id.tableNumberLayout)
         tableVariables = findViewById(R.id.tableVariableLayout)
 
-        var graphRandomNumbers: BarGraph = findViewById(R.id.graphRandomsNumbers)
-
+        val graphRandomNumbers: BarGraph = findViewById(R.id.graphRandomsNumbers)
 
         execute.setOnClickListener {
             tableRandoms.removeAllViews()
             tableVariables.removeAllViews()
             validate(input.text.toString())
-            var count = iterationsNumber(input.text.toString().toInt())
-            var numbersOne = generateNumbers(count)
-            var numbersTwo = generateNumbers(count)
+            val count = iterationsNumber(input.text.toString().toInt())
+            val numbersOne = generateNumbers(count)
+            val numbersTwo = generateNumbers(count)
 
             addHeaders("Indice", "Random Pol.1", "Random Pol.2", this.tableRandoms)
 
@@ -59,8 +58,8 @@ class MainActivity : AppCompatActivity() {
             val formula: TextView = findViewById(R.id.formulaOne);
             formula.visibility = View.VISIBLE
 
-            var variablesOne = generateRandomVariableBoxMuller1(numbersOne, numbersTwo)
-            var variablesTwo = generateRandomVariableBoxMuller2(numbersOne, numbersTwo)
+            val variablesOne = generateRandomVariableBoxMuller1(numbersOne, numbersTwo)
+            val variablesTwo = generateRandomVariableBoxMuller2(numbersOne, numbersTwo)
 
             addHeaders("Indice", "Box muller 1", "Box Muller 2", this.tableVariables)
 
@@ -69,7 +68,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dotPlot(average: Double, average1: Double, graphRandomNumbers: BarGraph) {
-        var bars = ArrayList<Bar>()
+        val bars = ArrayList<Bar>()
 
         val barOne = Bar()
         barOne.color = Color.BLUE
