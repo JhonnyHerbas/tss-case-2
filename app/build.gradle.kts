@@ -42,9 +42,10 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
+//    Librerias de graficacion
     implementation("org.quanqi:android-holo-graph:0.1.0")
-
     implementation("com.github.lecho:hellocharts-library:1.5.8")
+    implementation("com.jjoe64:graphview:4.2.2")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

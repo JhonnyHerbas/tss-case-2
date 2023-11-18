@@ -12,7 +12,9 @@
         android:id="@+id/topLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,20 +22,42 @@
 
         <EditText
             android:id="@+id/input"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
-            android:hint="Ingrese el numero de horas"
+            android:hint="Horas de simulacion"
+            android:inputType="number"
+            android:textColor="#F8F8F8"
+            android:textColorHint="#605C5C" />
+
+        <EditText
+            android:id="@+id/priceHours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:hint="Costo por hora (Bs.)"
+            android:inputType="number"
+            android:textColor="#F8F8F8"
+            android:textColorHint="#605C5C" />
+
+        <EditText
+            android:id="@+id/priceReplacement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:hint="Costo por repuesto (Bs.)"
             android:inputType="number"
             android:textColor="#F8F8F8"
             android:textColorHint="#605C5C" />
 
         <Button
             android:id="@+id/simular"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
+            android:gravity="center"
             android:text="Simular" />
     </LinearLayout>
 
@@ -46,7 +70,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topLayout"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,7 +93,6 @@
                 android:id="@+id/tableNumberLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:stretchColumns="*"
                 android:textColor="#F8F8F8" />
 
@@ -125,6 +148,7 @@
                     android:layout_marginEnd="10dp"
                     android:text="Box Muller 1"
                     android:textColor="#0000FF"
+                    android:textSize="20dp"
                     android:visibility="invisible" />
 
                 <TextView
@@ -135,8 +159,66 @@
                     android:layout_marginStart="10dp"
                     android:text="Box Muller 2"
                     android:textColor="#00FF00"
+                    android:textSize="20dp"
                     android:visibility="invisible" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HORAS ACTIVAS"
+                android:textColor="#F8F8F8"
+                android:textSize="25dp"
+                android:textStyle="bold|italic" />
+
+            <TableLayout
+                android:id="@+id/hoursActive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*"
+                android:textColor="#F8F8F8" />
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/scatterOne"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_margin="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:text="Diagrama de frecuenias Pol.1"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/ErrorsPolOne"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="15dp" />
+
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/scatterTwo"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_margin="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"
+                android:text="Diagrama de frecuenias Pol.2"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/ErrorsPolTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="15dp" />
 
         </LinearLayout>
     </ScrollView>

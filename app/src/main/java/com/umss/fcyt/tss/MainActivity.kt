@@ -14,9 +14,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.echo.holographlibrary.Bar
 import com.echo.holographlibrary.BarGraph
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.PointsGraphSeries
 import com.umss.fcyt.tss.util.Constant
 import lecho.lib.hellocharts.model.Axis
-import lecho.lib.hellocharts.model.AxisValue
 import lecho.lib.hellocharts.model.Line
 import lecho.lib.hellocharts.model.LineChartData
 import lecho.lib.hellocharts.model.PointValue
@@ -36,6 +38,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var tableVariables: TableLayout
 
+    private lateinit var tableHours: TableLayout
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         val input: EditText = findViewById(R.id.input)
         tableRandoms = findViewById(R.id.tableNumberLayout)
         tableVariables = findViewById(R.id.tableVariableLayout)
+        tableHours = findViewById(R.id.hoursActive)
 
         val graphRandomNumbers: BarGraph = findViewById(R.id.graphRandomsNumbers)
         val graphVariables: LineChartView = findViewById(R.id.lineChart)
@@ -52,6 +57,8 @@ class MainActivity : AppCompatActivity() {
         execute.setOnClickListener {
             tableRandoms.removeAllViews()
             tableVariables.removeAllViews()
+            tableHours.removeAllViews()
+
             validate(input.text.toString())
             val count = iterationsNumber(input.text.toString().toInt())
             val numbersOne = generateNumbers(count)
@@ -59,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
             addHeaders("Indice", "Random Pol.1", "Random Pol.2", this.tableRandoms)
 
-            addRowToTable(numbersOne, numbersTwo, this.tableRandoms)
+            addRowToTableDouble(numbersOne, numbersTwo, this.tableRandoms)
             dotPlot(numbersOne.average(), numbersTwo.average(), graphRandomNumbers)
 
             val formula: TextView = findViewById(R.id.formulaOne);
@@ -70,16 +77,115 @@ class MainActivity : AppCompatActivity() {
 
             addHeaders("Indice", "Box muller 1", "Box Muller 2", this.tableVariables)
 
-            addRowToTable(variablesOne, variablesTwo, this.tableVariables)
+            addRowToTableDouble(variablesOne, variablesTwo, this.tableVariables)
 
             val pointsOne = generatePoints(variablesOne)
             val pointsTwo = generatePoints(variablesTwo)
 
             graphicPoints(pointsOne, pointsTwo, graphVariables)
+
+            val politicalHoursOne = generateNormalDistribution(variablesOne)
+            val politicalHoursTwo = generateNormalDistribution(variablesTwo)
+
+            addHeaders("Indice", "Horas Pol.1", "Horas Pol.2", this.tableHours)
+
+            addRowToTableInt(politicalHoursOne, politicalHoursTwo, this.tableHours)
+
+            graphicScatter(politicalHoursOne, findViewById<GraphView>(R.id.scatterOne))
+            graphicScatter(politicalHoursTwo, findViewById<GraphView>(R.id.scatterTwo))
+
+            val countErrorOne: TextView = findViewById(R.id.ErrorsPolOne)
+            countErrorOne.text = "${countsErrors(politicalHoursOne)} errores"
+            val countErrorTwo: TextView = findViewById(R.id.ErrorsPolTwo)
+            countErrorTwo.text = "${countsErrors(politicalHoursTwo)} errores"
         }
     }
 
-    private fun graphicPoints(pointsOne: List<PointValue>, pointsTwo: List<PointValue>, graphVariables: LineChartView) {
+    /**
+     *
+     *
+    GENERADOR DE HORAS
+     */
+    private fun generateNormalDistribution(variables: List<Double>): List<Int> {
+        return variables.map { variable -> (Constant.AVERAGE_HOURS + Constant.DEVIATION * variable).toInt() }
+    }
+
+    /**
+     *
+     *
+    NUMEROS DE BOX MULLER
+     */
+    private fun generateRandomVariableBoxMuller1(
+        numbersOne: List<Double>,
+        numbersTwo: List<Double>
+    ): List<Double> {
+        val variables = mutableListOf<Double>()
+        for (index in numbersOne.indices) {
+            val decimalFormat = DecimalFormat("#.#####")
+            val calculate = sqrt(-2 * ln(numbersOne[index])) * cos(2 * PI * numbersTwo[index])
+            val calculateFormat = decimalFormat.format(calculate).toDouble()
+            variables.add(calculateFormat)
+        }
+        return variables
+    }
+
+    private fun countsErrors(listHours: List<Int>): Int {
+        var result = 0;
+        for (value in listHours) {
+            if (value < 500 || value > 700) {
+                result += 1
+            }
+        }
+        return result
+    }
+
+    private fun graphicScatter(politicalHoursOne: List<Int>, graphView: GraphView) {
+        graphView.removeAllSeries()
+        val seriesBelow500 = PointsGraphSeries<DataPoint>()
+        val seriesBetween500And700 = PointsGraphSeries<DataPoint>()
+
+        politicalHoursOne.forEachIndexed { index, value ->
+            val dataPoint = DataPoint(index.toDouble(), value.toDouble())
+
+            if (value < 500 || value > 700) {
+                seriesBelow500.appendData(dataPoint, true, politicalHoursOne.size)
+            } else {
+                seriesBetween500And700.appendData(dataPoint, true, politicalHoursOne.size)
+            }
+        }
+
+        seriesBelow500.color = Color.RED
+
+        seriesBelow500.size = 10f
+        seriesBetween500And700.size = 10f
+
+        graphView.addSeries(seriesBelow500)
+        graphView.addSeries(seriesBetween500And700)
+        graphView.viewport.isXAxisBoundsManual = true
+        graphView.viewport.setMinX(0.0)
+        graphView.viewport.setMaxX(politicalHoursOne.size.toDouble())
+        graphView.gridLabelRenderer.isHorizontalLabelsVisible = false
+    }
+
+    private fun generateRandomVariableBoxMuller2(
+        numbersOne: List<Double>,
+        numbersTwo: List<Double>
+    ): List<Double> {
+        val variables = mutableListOf<Double>()
+        for (index in numbersOne.indices) {
+            val decimalFormat = DecimalFormat("#.#####")
+            val calculate = sqrt(-2 * ln(numbersOne[index])) * sin(2 * PI * numbersTwo[index])
+            val calculateFormat = decimalFormat.format(calculate).toDouble()
+            variables.add(calculateFormat)
+        }
+        return variables
+    }
+
+    private fun graphicPoints(
+        pointsOne: List<PointValue>,
+        pointsTwo: List<PointValue>,
+        graphVariables: LineChartView
+    ) {
         val lineOne = Line(pointsOne).setColor(Color.BLUE)
         val lineTwo = Line(pointsTwo).setColor(Color.GREEN)
 
@@ -136,45 +242,23 @@ class MainActivity : AppCompatActivity() {
 
         val headerColumn1 = TextView(this)
         headerColumn1.text = s
-        headerColumn1.setTextColor(Color.rgb(248, 248,248))
+        headerColumn1.setTextColor(Color.rgb(248, 248, 248))
         headerColumn1.setTypeface(null, Typeface.BOLD)
         headerRow.addView(headerColumn1)
 
         val headerColumn2 = TextView(this)
         headerColumn2.text = s1
-        headerColumn2.setTextColor(Color.rgb(248, 248,248))
+        headerColumn2.setTextColor(Color.rgb(248, 248, 248))
         headerColumn2.setTypeface(null, Typeface.BOLD)
         headerRow.addView(headerColumn2)
 
         val headerColumn3 = TextView(this)
         headerColumn3.text = s2
-        headerColumn3.setTextColor(Color.rgb(248, 248,248))
+        headerColumn3.setTextColor(Color.rgb(248, 248, 248))
         headerColumn3.setTypeface(null, Typeface.BOLD)
         headerRow.addView(headerColumn3)
 
         table.addView(headerRow)
-    }
-
-    private fun generateRandomVariableBoxMuller1(numbersOne: List<Double>, numbersTwo: List<Double>): List<Double> {
-        val variables = mutableListOf<Double>()
-        for (index in numbersOne.indices) {
-            val decimalFormat = DecimalFormat("#.#####")
-            val calculate = sqrt(-2 * ln(numbersOne[index])) * cos(2 * PI * numbersTwo[index])
-            val calculateFormat = decimalFormat.format(calculate).toDouble()
-            variables.add(calculateFormat)
-        }
-        return variables
-    }
-
-    private fun generateRandomVariableBoxMuller2(numbersOne: List<Double>, numbersTwo: List<Double>): List<Double> {
-        val variables = mutableListOf<Double>()
-        for (index in numbersOne.indices) {
-            val decimalFormat = DecimalFormat("#.#####")
-            val calculate = sqrt(-2 * ln(numbersOne[index])) * sin(2 * PI * numbersTwo[index])
-            val calculateFormat = decimalFormat.format(calculate).toDouble()
-            variables.add(calculateFormat)
-        }
-        return variables
     }
 
     private fun validate(inputText: String) {
@@ -198,7 +282,11 @@ class MainActivity : AppCompatActivity() {
         return randomNumbers
     }
 
-    private fun addRowToTable(numbersOne: List<Double>, numbersTwo: List<Double>, table: TableLayout) {
+    private fun addRowToTableDouble(
+        numbersOne: List<Double>,
+        numbersTwo: List<Double>,
+        table: TableLayout
+    ) {
         for (index in numbersOne.indices) {
             val dataRow = TableRow(this)
 
@@ -215,6 +303,37 @@ class MainActivity : AppCompatActivity() {
             val dataColumn3 = TextView(this)
             dataColumn3.text = numbersTwo[index].toString()
             dataColumn3.setTextColor(Color.rgb(214, 214, 214))
+            dataRow.addView(dataColumn3)
+
+            table.addView(dataRow)
+        }
+    }
+
+    private fun addRowToTableInt(numbersOne: List<Int>, numbersTwo: List<Int>, table: TableLayout) {
+        for (index in numbersOne.indices) {
+            val dataRow = TableRow(this)
+
+            val dataColumn1 = TextView(this)
+            dataColumn1.text = (index + 1).toString()
+            dataColumn1.setTextColor(Color.rgb(214, 214, 214))
+            dataRow.addView(dataColumn1)
+
+            val dataColumn2 = TextView(this)
+            dataColumn2.text = numbersOne[index].toString() + " hrs"
+            if (numbersOne[index] > 700 || numbersOne[index] < 500) {
+                dataColumn2.setTextColor(Color.RED)
+            } else {
+                dataColumn2.setTextColor(Color.rgb(214, 214, 214))
+            }
+            dataRow.addView(dataColumn2)
+
+            val dataColumn3 = TextView(this)
+            dataColumn3.text = numbersTwo[index].toString() + " hrs"
+            if (numbersTwo[index] > 700 || numbersTwo[index] < 500) {
+                dataColumn3.setTextColor(Color.RED)
+            } else {
+                dataColumn3.setTextColor(Color.rgb(214, 214, 214))
+            }
             dataRow.addView(dataColumn3)
 
             table.addView(dataRow)
