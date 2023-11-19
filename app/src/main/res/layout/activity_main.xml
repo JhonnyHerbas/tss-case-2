@@ -188,7 +188,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
                 android:text="Diagrama de frecuenias Pol.1"
                 android:textSize="20dp" />
 
@@ -196,8 +195,8 @@
                 android:id="@+id/ErrorsPolOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="15dp" />
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center" />
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/scatterTwo"
@@ -209,7 +208,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="10dp"
                 android:text="Diagrama de frecuenias Pol.2"
                 android:textSize="20dp" />
 
@@ -217,9 +215,42 @@
                 android:id="@+id/ErrorsPolTwo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginEnd="15dp" />
+                android:layout_marginStart="15dp"
+                android:layout_gravity="center" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="COSTOS"
+                android:textColor="#F8F8F8"
+                android:textSize="25dp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/pricePerHour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/pricePerSpare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/optionFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="#E3001B"
+                android:textSize="20dp" />
+
+            <com.echo.holographlibrary.BarGraph
+                android:id="@+id/costs"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="16dp" />
         </LinearLayout>
     </ScrollView>
 

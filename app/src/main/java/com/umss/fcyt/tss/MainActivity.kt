@@ -40,6 +40,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var tableHours: TableLayout
 
+    private lateinit var priceHours: EditText
+
+    private lateinit var priceReplacement: EditText
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,8 +55,12 @@ class MainActivity : AppCompatActivity() {
         tableVariables = findViewById(R.id.tableVariableLayout)
         tableHours = findViewById(R.id.hoursActive)
 
+        priceHours = findViewById(R.id.priceHours)
+        priceReplacement = findViewById(R.id.priceReplacement)
+
         val graphRandomNumbers: BarGraph = findViewById(R.id.graphRandomsNumbers)
         val graphVariables: LineChartView = findViewById(R.id.lineChart)
+        val costs: BarGraph = findViewById(R.id.costs)
 
         execute.setOnClickListener {
             tableRandoms.removeAllViews()
@@ -94,11 +102,51 @@ class MainActivity : AppCompatActivity() {
             graphicScatter(politicalHoursOne, findViewById<GraphView>(R.id.scatterOne))
             graphicScatter(politicalHoursTwo, findViewById<GraphView>(R.id.scatterTwo))
 
+            val countOne = countsErrors(politicalHoursOne)
             val countErrorOne: TextView = findViewById(R.id.ErrorsPolOne)
-            countErrorOne.text = "${countsErrors(politicalHoursOne)} errores"
+            countErrorOne.text = "$countOne errores"
+            val countTwo = countsErrors(politicalHoursTwo)
             val countErrorTwo: TextView = findViewById(R.id.ErrorsPolTwo)
-            countErrorTwo.text = "${countsErrors(politicalHoursTwo)} errores"
+            countErrorTwo.text = "$countTwo errores"
+
+            validate(priceHours.text.toString())
+            validate(priceReplacement.text.toString())
+            val sumPolicyPriceOne = calculatePolicyOne(countOne)
+            val sumPolicyPriceTwo = calculatePolicyTwo(countTwo)
+
+            val pricePerHour: TextView = findViewById(R.id.pricePerHour)
+            pricePerHour.setText("El valor del precio por hora es: Bs " + priceHours.text.toString())
+            val pricePerSpare: TextView = findViewById(R.id.pricePerSpare)
+            pricePerSpare.setText("El valor del precio por repuesto es: Bs " + priceReplacement.text.toString())
+
+            dotPlot(sumPolicyPriceOne, sumPolicyPriceTwo, costs)
+
+            if (sumPolicyPriceOne < sumPolicyPriceTwo) {
+                val result: TextView = findViewById(R.id.optionFinal)
+                result.setText("LA POLITICA 1 ES MAS EFICIENTE")
+            } else {
+                val result: TextView = findViewById(R.id.optionFinal)
+                result.setText("LA POLITICA 2 ES MAS EFICIENTE")
+            }
         }
+    }
+
+    /**
+     *
+     *
+    CALCULA EL COSTE DE LA POLITICA UNO
+     */
+    private fun calculatePolicyOne(toInt: Int): Int {
+        return toInt * (priceReplacement.text.toString().toInt() + priceHours.text.toString().toInt())
+    }
+
+    /**
+     *
+     *
+    CALCULA EL COSTE DE LA POLITICA DOS
+     */
+    private fun calculatePolicyTwo(toInt: Int): Int {
+        return toInt * ((priceReplacement.text.toString().toInt() * 4) + (priceHours.text.toString().toInt()*2))
     }
 
     /**
@@ -237,6 +285,24 @@ class MainActivity : AppCompatActivity() {
         graphRandomNumbers.bars = bars
     }
 
+    private fun dotPlot(costPolOne: Int, costPolTwo: Int, graphRandomNumbers: BarGraph) {
+        val bars = ArrayList<Bar>()
+
+        val barOne = Bar()
+        barOne.color = Color.BLUE
+        barOne.name = "Costo total Pol.1"
+        barOne.value = costPolOne.toFloat()
+        bars.add(barOne)
+
+        val barTwo = Bar()
+        barTwo.color = Color.GREEN
+        barTwo.name = "Costo total Pol.2"
+        barTwo.value = costPolTwo.toFloat()
+        bars.add(barTwo)
+
+        graphRandomNumbers.bars = bars
+    }
+
     private fun addHeaders(s: String, s1: String, s2: String, table: TableLayout) {
         val headerRow = TableRow(this)
 
@@ -263,7 +329,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun validate(inputText: String) {
         if (inputText.isEmpty()) {
-            Toast.makeText(this, "Por favor ingrese la cantidad de horas", Toast.LENGTH_SHORT)
+            Toast.makeText(this, "Por favor ingrese datos correctos", Toast.LENGTH_SHORT)
                 .show()
         }
     }
