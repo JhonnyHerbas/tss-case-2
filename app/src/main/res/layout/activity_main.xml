@@ -20,45 +20,39 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
-        <EditText
-            android:id="@+id/input"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:hint="Horas de simulacion"
-            android:inputType="number"
-            android:textColor="#F8F8F8"
-            android:textColorHint="#605C5C" />
-
-        <EditText
-            android:id="@+id/priceHours"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:hint="Costo por hora (Bs.)"
-            android:inputType="number"
-            android:textColor="#F8F8F8"
-            android:textColorHint="#605C5C" />
-
-        <EditText
-            android:id="@+id/priceReplacement"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:hint="Costo por repuesto (Bs.)"
-            android:inputType="number"
-            android:textColor="#F8F8F8"
-            android:textColorHint="#605C5C" />
-
-        <Button
-            android:id="@+id/simular"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:text="Problema de mantenimiento"
+            android:textSize="25dp"
             android:gravity="center"
-            android:text="Simular" />
+            android:textColor="#F8F8F8"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Politica 1"
+            android:textSize="20dp"
+            android:textColor="#F8F8F8"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Realizar solo el cambio del componente que falla, que implica en la desconexion del equipo por 1 hora"
+            android:textSize="15dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Politica 2"
+            android:textSize="20dp"
+            android:textColor="#F8F8F8"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Realizar solo el cambio de los 4 componentes que fallan, lo que implica en la desconexion del equipo por 2 horas"
+            android:textSize="15dp"/>
     </LinearLayout>
 
     <ScrollView
@@ -81,6 +75,46 @@
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="49dp">
 
+            <EditText
+                android:id="@+id/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:hint="Horas de simulacion"
+                android:inputType="number"
+                android:textColor="#F8F8F8"
+                android:textColorHint="#605C5C" />
+
+            <EditText
+                android:id="@+id/priceHours"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:hint="Costo por hora (Bs.)"
+                android:inputType="number"
+                android:textColor="#F8F8F8"
+                android:textColorHint="#605C5C" />
+
+            <EditText
+                android:id="@+id/priceReplacement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:hint="Costo por repuesto (Bs.)"
+                android:inputType="number"
+                android:textColor="#F8F8F8"
+                android:textColorHint="#605C5C" />
+
+            <Button
+                android:id="@+id/simular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Simular" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,18 +135,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="16dp" />
-
-            <TextView
-                android:id="@+id/formulaOne"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="X = Sum(Ramdon) / iteraciones"
-                android:textAlignment="center"
-                android:textColor="#F8F8F8"
-                android:textSize="20dp"
-                android:textStyle="italic"
-                android:visibility="invisible" />
 
             <TextView
                 android:layout_width="wrap_content"
