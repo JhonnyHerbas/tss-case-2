@@ -115,6 +115,13 @@
                 android:gravity="center"
                 android:text="Simular" />
 
+            <Button
+                android:id="@+id/history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Ver historial" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.umss.fcyt.tss
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -13,6 +14,7 @@ import com.umss.fcyt.tss.classes.AddGraphics
 import com.umss.fcyt.tss.classes.Assistant
 import com.umss.fcyt.tss.classes.Functions
 import com.umss.fcyt.tss.classes.SetTables
+import com.umss.fcyt.tss.classes.Simulation
 import com.umss.fcyt.tss.util.Constant
 import lecho.lib.hellocharts.view.LineChartView
 
@@ -24,14 +26,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var tableHours: TableLayout
 
-    private lateinit var priceHours: EditText
-
-    private lateinit var priceReplacement: EditText
-
     private val function: Functions = Functions()
     private val setTables: SetTables = SetTables()
     private val addGraphics: AddGraphics = AddGraphics()
     private val assistant: Assistant = Assistant()
+
+    private val history: ArrayList<Simulation> = ArrayList()
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity() {
         tableVariables = findViewById(R.id.tableVariableLayout)
         tableHours = findViewById(R.id.hoursActive)
 
-        priceHours = findViewById(R.id.priceHours)
-        priceReplacement = findViewById(R.id.priceReplacement)
+        val priceHours: EditText = findViewById(R.id.priceHours)
+        val priceReplacement: EditText = findViewById(R.id.priceReplacement)
 
         val graphRandomNumbers: BarGraph = findViewById(R.id.graphRandomsNumbers)
         val graphVariables: LineChartView = findViewById(R.id.lineChart)
@@ -142,6 +142,28 @@ class MainActivity : AppCompatActivity() {
                 val result: TextView = findViewById(R.id.optionFinal)
                 result.text = "LA POLITICA 2 ES MAS EFICIENTE"
             }
+
+            val newSimulation = Simulation(
+                simulationHours = input.text.toString().toInt(),
+                disconnectionPrice =  priceHours.text.toString().toInt(),
+                replacementPrice = priceReplacement.text.toString().toInt(),
+                policyCost1 = sumPolicyPriceOne.toDouble(),
+                policyCost2 = sumPolicyPriceTwo.toDouble(),
+                bestOption = if (sumPolicyPriceOne < sumPolicyPriceTwo) {
+                    "Pol. 1"
+                } else {
+                    "Pol. 2"
+                }
+            )
+
+            history.add(newSimulation)
+        }
+
+        val buttonHistory: Button = findViewById(R.id.history)
+        buttonHistory.setOnClickListener {
+            val intent = Intent(this, HistoryActivity::class.java)
+            intent.putExtra("history", history)
+            startActivity(intent)
         }
     }
 
