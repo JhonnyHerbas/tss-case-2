@@ -165,6 +165,12 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("history", history)
             startActivity(intent)
         }
+
+        val help: Button = findViewById(R.id.help)
+        help.setOnClickListener {
+            val intent = Intent(this, Information::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun validate(inputText: String) {
